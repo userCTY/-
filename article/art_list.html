@@ -15,6 +15,26 @@
         <div class="layui-card-header">文章列表</div>
         <div class="layui-card-body">
             <!-- 筛选 -->
+            <form class="layui-form" id="form-search">
+                <div class="layui-form-item layui-inline">
+                    <select name="cate_id"></select>
+                </div>
+
+                <div class="layui-form-item layui-inline">
+                    <!-- name属性的值在select上面获取 -->
+                    <select name="state">
+                        <!-- value的值在option上获取 -->
+                        <!-- value具体值的写法要与后端具体协商,不能随便写 -->
+                        <option value="">所有状态</option>
+                        <option value="已发布">已发布</option>
+                        <option value="草稿">草稿</option>
+                    </select>
+                </div>
+
+                <div class="layui-form-item layui-inline">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">筛选</button>
+                </div>
+            </form>
             <!-- 列表区域 -->
             <table class="layui-table">
                 <colgroup>
@@ -36,20 +56,30 @@
                 <tbody></tbody>
             </table>
             <!-- 页码 -->
+            <div id="pageBox"></div>
         </div>
     </div>
 
+    <!-- 筛选区模板 -->
+    <script type="text/html" id="tpl-cate">
+        <option value="">所有分类</option>
+        {{each data}}
+        <option value="{{$value.Id}}">{{$value.name}}</option>
+        {{/each}}
+    </script>
+
+
     <!-- 列表区模板 -->
-    <script type="text/html">
+    <script type="text/html" id="tpl-table">
         {{each data}}
         <tr>
             <td>{{$value.title}}</td>
             <td>{{$value.cate_name}}</td>
-            <td>{{$value.pub_date}}</td>
+            <td>{{$value.pub_date|dataFormat}}</td>
             <td>{{$value.state}}</td>
             <td>
                 <button type="button" class="layui-btn layui-btn-xs">编辑</button>
-                <button type="button" class="layui-btn layui-btn-danger layui-btn-xs">删除</button>
+                <button type="button" class="layui-btn layui-btn-danger layui-btn-xs btn-delete" data-id="{{$value.Id}}">删除</button>
             </td>
         </tr>
         {{/each}}
